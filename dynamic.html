@@ -6,6 +6,35 @@
     <title>Elementos Dinâmicos - Cypress Playground</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the tooltip above the text */
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -28,8 +57,57 @@
         <h2>Elementos Dinâmicos</h2>
         <button id="load-content">Carregar Conteúdo</button>
         <div id="dynamic-content"></div>
+        <div class="tooltip">
+            <span class="tooltiptext">Clique para revelar mais conteúdo</span>
+            <button id="toggle-content">Mostrar/Ocultar Conteúdo</button>
+        </div>
+        <div id="extra-content" class="hidden">
+            <p>Este é o conteúdo extra que pode ser mostrado ou ocultado ao clicar no botão acima.</p>
+        </div>
+        <label for="hover-box">Passe o mouse aqui:</label>
+        <div id="hover-box" class="tooltip">
+            <span class="tooltiptext">Você passou o mouse!</span>
+            <p>Conteúdo que aparece ao passar o mouse.</p>
+        </div>
     </section>
 </main>
-<script src="js/scripts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Carregar conteúdo dinamicamente
+        const loadContentButton = document.getElementById('load-content');
+        const dynamicContent = document.getElementById('dynamic-content');
+
+        loadContentButton.addEventListener('click', function() {
+            dynamicContent.innerHTML = '<p>Conteúdo carregado dinamicamente!</p>';
+        });
+
+        // Mostrar/Ocultar conteúdo extra
+        const toggleContentButton = document.getElementById('toggle-content');
+        const extraContent = document.getElementById('extra-content');
+
+        toggleContentButton.addEventListener('click', function() {
+            if (extraContent.classList.contains('hidden')) {
+                extraContent.classList.remove('hidden');
+                toggleContentButton.textContent = 'Ocultar Conteúdo';
+            } else {
+                extraContent.classList.add('hidden');
+                toggleContentButton.textContent = 'Mostrar Conteúdo';
+            }
+        });
+
+        // Tooltip para hover
+        const hoverBox = document.getElementById('hover-box');
+        hoverBox.addEventListener('mouseover', function() {
+            const tooltipText = hoverBox.querySelector('.tooltiptext');
+            tooltipText.style.visibility = 'visible';
+            tooltipText.style.opacity = 1;
+        });
+        hoverBox.addEventListener('mouseout', function() {
+            const tooltipText = hoverBox.querySelector('.tooltiptext');
+            tooltipText.style.visibility = 'hidden';
+            tooltipText.style.opacity = 0;
+        });
+    });
+</script>
 </body>
 </html>

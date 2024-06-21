@@ -6,6 +6,35 @@
     <title>Elementos Interativos - Cypress Playground</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the tooltip above the text */
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -31,7 +60,43 @@
         <label><input type="checkbox" id="test-checkbox"> Checkbox</label><br><br>
         <label><input type="radio" name="radio" id="radio1"> Radio 1</label>
         <label><input type="radio" name="radio" id="radio2"> Radio 2</label>
+        <div class="tooltip">
+            <span class="tooltiptext">Tooltip ao passar o mouse</span>
+            <p>Passe o mouse aqui para ver a tooltip</p>
+        </div>
+        <div>
+            <h3>Escolha sua série favorita:</h3>
+            <select id="series-select">
+                <option value="stranger_things">Stranger Things</option>
+                <option value="breaking_bad">Breaking Bad</option>
+                <option value="game_of_thrones">Game of Thrones</option>
+                <option value="the_office">The Office</option>
+            </select>
+            <p id="selected-series" class="hidden">Você selecionou: <span></span></p>
+        </div>
     </section>
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const testButton = document.getElementById('test-button');
+        testButton.addEventListener('click', function() {
+            alert('Botão clicado!');
+        });
+
+        const testLink = document.getElementById('test-link');
+        testLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Link clicado!');
+        });
+
+        const seriesSelect = document.getElementById('series-select');
+        const selectedSeries = document.getElementById('selected-series');
+        seriesSelect.addEventListener('change', function() {
+            const series = seriesSelect.value;
+            selectedSeries.querySelector('span').textContent = seriesSelect.options[seriesSelect.selectedIndex].text;
+            selectedSeries.classList.remove('hidden');
+        });
+    });
+</script>
 </body>
 </html>

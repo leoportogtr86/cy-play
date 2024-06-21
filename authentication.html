@@ -6,6 +6,24 @@
     <title>Autenticação - Cypress Playground</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+        .message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #32cd32;
+            color: #000;
+        }
+        .error {
+            background-color: #ff6347;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -26,6 +44,11 @@
 <main>
     <section id="authentication">
         <h2>Autenticação</h2>
+        <p>Use as seguintes credenciais para testar:</p>
+        <ul>
+            <li>Usuário correto: <strong>admin</strong></li>
+            <li>Senha correta: <strong>password123</strong></li>
+        </ul>
         <form id="login-form">
             <label for="username">Usuário:</label>
             <input type="text" id="username" name="username"><br><br>
@@ -33,9 +56,44 @@
             <input type="password" id="password-login" name="password-login"><br><br>
             <input type="submit" value="Login">
         </form>
-        <button id="logout-button">Logout</button>
+        <div id="login-message" class="message hidden"></div>
+        <button id="logout-button" class="hidden">Logout</button>
     </section>
 </main>
-<script src="js/scripts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('login-form');
+        const logoutButton = document.getElementById('logout-button');
+        const loginMessage = document.getElementById('login-message');
+
+        const validUsername = 'admin';
+        const validPassword = 'password123';
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password-login').value;
+
+            if (username === validUsername && password === validPassword) {
+                loginMessage.textContent = 'Login realizado com sucesso!';
+                loginMessage.className = 'message success';
+                loginMessage.classList.remove('hidden');
+                logoutButton.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            } else {
+                loginMessage.textContent = 'Usuário ou senha incorretos!';
+                loginMessage.className = 'message error';
+                loginMessage.classList.remove('hidden');
+            }
+        });
+
+        logoutButton.addEventListener('click', function() {
+            loginMessage.textContent = '';
+            loginMessage.classList.add('hidden');
+            logoutButton.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
+    });
+</script>
 </body>
 </html>

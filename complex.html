@@ -6,6 +6,32 @@
     <title>Interações Complexas - Cypress Playground</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+        #drag-container {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        #drag-item, .drag-item {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin: 10px;
+            cursor: grab;
+            display: inline-block;
+        }
+        #drop-zone {
+            border: 2px dashed #32cd32;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .slider-output {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -26,12 +52,74 @@
 <main>
     <section id="complex">
         <h2>Interações Complexas</h2>
+
+        <!-- Drag and Drop -->
+        <h3>Arrastar e Soltar</h3>
         <div id="drag-container">
-            <div id="drag-item" draggable="true">Arraste-me</div>
+            <div class="drag-item" draggable="true">Item 1</div>
+            <div class="drag-item" draggable="true">Item 2</div>
+            <div class="drag-item" draggable="true">Item 3</div>
         </div>
+        <div id="drop-zone">Solte os itens aqui</div>
+
+        <!-- Sliders Dinâmicos -->
+        <h3>Slider Dinâmico</h3>
         <input type="range" id="slider" min="0" max="100">
+        <p class="slider-output">Valor: <span id="slider-value">50</span></p>
+
+        <!-- Gerador de Conteúdo Dinâmico -->
+        <h3>Gerador de Conteúdo Dinâmico</h3>
+        <label for="dynamic-input">Digite algo:</label>
+        <input type="text" id="dynamic-input">
+        <button id="generate-content">Gerar Conteúdo</button>
+        <div id="generated-content" class="hidden"></div>
     </section>
 </main>
-<script src="js/scripts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Drag and Drop
+        const dragItems = document.querySelectorAll('.drag-item');
+        const dropZone = document.getElementById('drop-zone');
+
+        dragItems.forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                e.dataTransfer.setData('text', e.target.innerHTML);
+            });
+        });
+
+        dropZone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text');
+            const newItem = document.createElement('div');
+            newItem.className = 'drag-item';
+            newItem.draggable = true;
+            newItem.innerHTML = data;
+            dropZone.appendChild(newItem);
+        });
+
+        // Slider Dinâmico
+        const slider = document.getElementById('slider');
+        const sliderValue = document.getElementById('slider-value');
+
+        slider.addEventListener('input', function() {
+            sliderValue.textContent = slider.value;
+        });
+
+        // Gerador de Conteúdo Dinâmico
+        const dynamicInput = document.getElementById('dynamic-input');
+        const generateContentButton = document.getElementById('generate-content');
+        const generatedContent = document.getElementById('generated-content');
+
+        generateContentButton.addEventListener('click', function() {
+            const inputText = dynamicInput.value;
+            generatedContent.innerHTML = `<p>Você digitou: ${inputText}</p>`;
+            generatedContent.classList.remove('hidden');
+        });
+    });
+</script>
 </body>
 </html>
